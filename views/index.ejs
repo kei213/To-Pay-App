@@ -72,17 +72,17 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form class = "needs-validation" id = "addCustomerForm" novalidate >
+              <form class = "needs-validation" id = "addCustomerForm" novalidate>
                 <div class="mb-2">
                   <label for="customerName" class="col-form-label">Name</label>
-                  <input type="text" class="form-control" id="customerName" required>
+                  <input type="text" class="form-control" id="customerName" required  autocomplete="off">
                 </div>
                 <div class="invalid-feedback">
                   Please provide a Customer Name.
                 </div>
                 <div class="mb-3">
                   <label for="customerNumber" class="col-form-label">Phone Number</label>
-                  <input type = "text" class="form-control" id="customerNumber" required></textarea>
+                  <input type = "text" class="form-control" id="customerNumber" required  autocomplete="off"></textarea>
                 </div>
                 <div class="invalid-feedback">
                   Please provide a Customer Name.
@@ -90,7 +90,7 @@
             
                 <div class="">
                   <!--<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-                  <button class="btn btn-primary" >Add Customer</button>
+                  <button class="btn btn-primary" data-bs-dismiss="modal">Add Customer</button>
                   <!--data-bs-dismiss="modal"-->
                 </div>
               </form>
