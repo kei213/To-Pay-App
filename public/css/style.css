@@ -1,0 +1,80 @@
+/* import fonts */
+@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+
+/* VARIABLES */
+:root {
+  --bg-color: #fff;
+
+}
+
+/* General CSS */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /*font-family: Rubik;*/
+}
+
+html {
+  font-size: 15px;
+  overflow-x: hidden;
+}
+
+.navbar {
+  background-color: #1e2226 !important;
+}
+
+.navbar-header {
+  font-size: 1.4rem;
+  color: #9b9fa3 !important;
+}
+
+.navbar-icons {
+  margin-left: 2.0rem;
+  /*margin-right: 17px;*/
+  margin-top:5px;
+  font-size: 1.09rem;
+  color: #9b9fa3;
+}
+
+.main-section {
+  max-width: 65%;
+  margin: auto;
+  padding: 0 1.3rem;
+}
+
+.select-add-container {
+  width:  100%;
+  /*height: 18.8%;*/
+  margin: auto;
+  padding: 1.6rem 0 ;
+  display:  flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#customerSelect {
+  width: 80%;
+  background: ;
+}
+
+.add-customer-btn {
+  width: 19%;
+}
+
+.add-customer-modal {
+  background:  #aaa;
+}
+
+.modal-content {
+  /*display:  flex;
+  flex-direction: column;
+  justify-content: space-between;*/
+}
+
+.main-working-container {
+  border: 1px solid #9b9fa3;
+  width:  100%;
+  height: 80vh;
+}
+

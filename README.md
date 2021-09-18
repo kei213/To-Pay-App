@@ -1,1 +1,1 @@
-An app forstoring customer data
+An app for storing customer data
