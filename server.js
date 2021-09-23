@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const Customer = require('./models/customer')
 
 const app = express()
 const port = 3000
@@ -9,57 +10,50 @@ app.use(express.static('public'))
 
 
 //Set up default mongoose connection
-var mongoDB = 'mongodb://localhost:27017/topay';
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+const dbURI = 'mongodb://localhost:27017/topay';
+
+mongoose.connect(dbURI, {
+	useNewUrlParser: true, 
+	useUnifiedTopology: true}
+)
+.then((result) => {
+        console.log('connected to db')
+        app.listen(port, () => {
+            console.log(`app listening at http://localhost:${port}`)
+        })
+    }
+)
+.catch((err) => console.log('not connected', err));
 
 //Get the default connection
 var connection = mongoose.connection;
-
-/*//Bind connection to error event (to get notification of connection errors)
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));*/
-
-// When successfully connected
-connection.on('connected', function () {  
-  console.log('Connected to mongo server' /*+ dbURI*/);
-}); 
-
-// If the connection throws an error
-connection.on('error',function (err) {  
-  console.log('Mongoose default connection error: ' + err);
-});
-
-/*var collections = mongoose.connections[0].collections;
-var names = [];
-Object.keys(collections).forEach(function(k) {
-    names.push(k);
-});
-console.log(names);*/
-
-
-
-connection.once('open', function () {
-    console.log('connection.once')
-
-    connection.db.collection("topay", function(err, collection){
-        collection.find({}).toArray(function(err, data){
-            console.log('data', data); // it will print your collection data
-        })
-
-    });
-
-    Object.keys(connection.models).forEach((collection) => {
-    // You can get the string name.
-    console.log('collection', collection);
-    })
-
-});
-
-
 
 app.get("/", (req, res) => {
 	res.render('index')
 })
 
-app.listen(port, () => {
-  console.log(`app listening at http://localhost:${port}`)
+app.get('/add-customer', (req, res) => {
+    const newCustomer = new Customer({
+        name: 'Tim',
+        phoneNumber: 72664512
+    })
+
+    newCustomer.save()
+            .then((result) => {
+                res.send(result)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
 })
+
+app.get('/all-customers', (req, res) => {
+    Customer.find()
+       .then((result) => {
+            res.send(result)
+       })   
+       .catch((err) => {
+        console.log(err)
+       })  
+})
+
