@@ -29,7 +29,16 @@ mongoose.connect(dbURI, {
 var connection = mongoose.connection;
 
 app.get("/", (req, res) => {
-	res.render('index')
+	 
+        Customer.find()
+       .then((result) => {
+            // res.render('index')
+            res.render('index')
+            console.log(result)
+       })   
+       .catch((err) => {
+        console.log(err)
+       })
 })
 
 app.get('/add-customer', (req, res) => {

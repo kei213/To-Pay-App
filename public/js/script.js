@@ -1,19 +1,39 @@
 // import { renderCustomerList } from './functions.js'
+let customers = {}
+let select = document.querySelector('#customerSelect')
+
+fetch('/all-customers')
+    .then(response => response.json())
+    .then(data => {
+            console.log('data from db', data)
+          customers = data
+          console.log('customers length is, ', customers.length)
+
+
+          for (let i = 0; i < customers.length; i++) {
+            select.innerHTML += `<option>${customers[i].name}</option>`
+          }
+          /*customers.forEach( (customer) => {      
+          // console.log(customer.name)       
+          
+      
+          })*/
+    });
 
 //Render products
 
-let select = document.querySelector('#customerSelect')
+
 
 //render each customer name to the DOM
-function renderCustomerList() {
+/*function renderCustomerList(customerList) {
     customers.forEach( (customer) => {      
           // console.log(customer.name)       
           select.innerHTML += `<option>${customer.name}</option>`
       
     })
-}
+}*/
 
-renderCustomerList()
+// renderCustomerList()
 
 function displayCustomer() {
 
