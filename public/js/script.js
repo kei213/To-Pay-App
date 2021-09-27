@@ -1,28 +1,31 @@
 // import { renderCustomerList } from './functions.js'
 let customers = {}
-let select = document.querySelector('#customerSelect')
+let select = document.querySelector('#customerList')
 
-fetch('/all-customers')
-    .then(response => response.json())
-    .then(data => {
-            console.log('data from db', data)
-          customers = data
-          console.log('customers length is, ', customers.length)
+function renderCustomerList() {
+  fetch('/all-customers')
+      .then(response => response.json())
+      .then(data => {
+              console.log('data from db', data)
+            customers = data
+            console.log('customers length is, ', customers.length)
 
+            select.innerHTML = '<li><h6 class="dropdown-header">Select a customer</h6></li>'
 
-          for (let i = 0; i < customers.length; i++) {
-            select.innerHTML += `<option>${customers[i].name}</option>`
-          }
-          /*customers.forEach( (customer) => {      
-          // console.log(customer.name)       
-          
-      
-          })*/
-    });
+            for (let i = 0; i < customers.length; i++) {
+              select.innerHTML += `<li><a class="dropdown-item" href="#">${customers[i].name}</a></li>`
+            }                      
+            /*customers.forEach( (customer) => {      
+            // console.log(customer.name)       
+            
+        
+            })*/
+      });
+}
 
 //Render products
 
-
+renderCustomerList()
 
 //render each customer name to the DOM
 /*function renderCustomerList(customerList) {
@@ -33,11 +36,7 @@ fetch('/all-customers')
     })
 }*/
 
-// renderCustomerList()
 
-function displayCustomer() {
-
-}
 
 //listenening for selected customer
 select.addEventListener('input', () => {
@@ -62,24 +61,28 @@ const addCustomerForm = document.getElementById('addCustomerForm');
 addCustomerForm.addEventListener('submit', (e) => {
   console.log('submit ran')
   e.preventDefault();
-  //Get message text
-  const customerName = e.target.elements.customerName.value;
-  const customerNumber = e.target.elements.customerNumber.value;  
 
-  const newCustomer =  {
-    id: 7,
-    name: customerName,
-    price: 29.99,
-    instock: 100,
+  const name = e.target.elements.customerName.value;
+  const phoneNumber = e.target.elements.customerNumber.value;  
 
-  } 
-
-  customers.push(newCustomer)
-  console.log('customers', customers)
-
-  const customerData = customers.filter(customer => {
-        return customer.name === newCustomer.name
+ 
+  return fetch('/add-new-customer', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        // 'CSRF-Token': Cookies.get('XSRF-TOKEN'),
+      },
+      body:JSON.stringify({ name, phoneNumber}),              
   })
+  .then( () => {
+    // select.innerHTML = "<option></option>";
+    select.innerHTML = "<option selected>Select a Customer</option>"
+    select.innerHTML +=  "<option></option>"                  
+    renderCustomerList()
+  })
+
+
 
   console.log('customerData ', customerData)
   customerDataStringify = (JSON.stringify(customerData))
@@ -91,9 +94,20 @@ addCustomerForm.addEventListener('submit', (e) => {
   select.innerHTML = `<option selected>Select a Customer</option>
                       <option></option>`
 
-  renderCustomerList()
+  
 
 })  
+
+const searchInput = document.querySelector("#customerNameSearchInput")
+searchInput.addEventListener('click', (e) => {
+  e.preventDefault()
+  console.log("shit")
+  var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+  var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+  return new bootstrap.Dropdown(dropdownToggleEl)
+  })
+})
+
 
 //disabling form submissions if there are invalid fields
 function disableFormSubmission() {

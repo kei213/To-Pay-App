@@ -53,9 +53,16 @@ html {
   justify-content: space-between;
 }
 
-#customerSelect {
+.select-customer {
   width: 80%;
-  background: ;
+  /*overflow:none;*/
+}
+
+.customer-list {
+  
+  /*max-width: inherit;*/
+  width: 100%;
+  
 }
 
 .add-customer-btn {
