@@ -6,24 +6,29 @@ function renderCustomerList() {
   fetch('/all-customers')
       .then(response => response.json())
       .then(data => {
-              console.log('data from db', data)
+            console.log('data from db', data)
             customers = data
-            console.log('customers length is, ', customers.length)
 
             select.innerHTML = '<li><h6 class="dropdown-header">Select a customer</h6></li>'
 
             for (let i = 0; i < customers.length; i++) {
-              select.innerHTML += `<li><a class="dropdown-item" href="#">${customers[i].name}</a></li>`
-            }                      
-            /*customers.forEach( (customer) => {      
-            // console.log(customer.name)       
-            
-        
-            })*/
-      });
-}
+              select.innerHTML += `<li><a class="dropdown-item" href="#" id = "listItem">${customers[i].name}</a></li>`
 
-//Render products
+              if (i - customers.length == -1) {                 
+                 let listItem = document.querySelectorAll("#listItem")
+
+                 for (let i = 0; i < listItem.length; i++) {
+                     listItem[i].addEventListener('click', (e) => {
+                       e.preventDefault() 
+                       console.log(listItem[i].innerText)                  
+
+                     })
+                 }   
+              }
+            }                      
+      })   
+
+}
 
 renderCustomerList()
 
@@ -35,8 +40,6 @@ renderCustomerList()
       
     })
 }*/
-
-
 
 //listenening for selected customer
 select.addEventListener('input', () => {
@@ -98,15 +101,27 @@ addCustomerForm.addEventListener('submit', (e) => {
 
 })  
 
-const searchInput = document.querySelector("#customerNameSearchInput")
+let searchInput = document.querySelector("#customerNameSearchInput")
 searchInput.addEventListener('click', (e) => {
-  e.preventDefault()
-  console.log("shit")
+  e.preventDefault() 
   var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
   var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
   return new bootstrap.Dropdown(dropdownToggleEl)
   })
 })
+
+const expandList = document.querySelector(".expand-list")
+expandList.addEventListener('click', (e) => {  
+  e.preventDefault()  
+
+  var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+  var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+  return new bootstrap.Dropdown(dropdownToggleEl)
+  })
+
+})
+
+
 
 
 //disabling form submissions if there are invalid fields

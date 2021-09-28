@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <!--Font-Awesome link-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel = "stylesheet" href = "css/style.css">
 
@@ -57,11 +59,12 @@
           <option value="3">Three</option>-->
 
         <div class="input-group btn-group select-customer">
-          <input type="text" class="form-control" id = "customerNameSearchInput" placeholder = "Search names..." data-bs-toggle="dropdown" aria-label="Text input with segmented dropdown button">
+          <input type="text" class="form-control search-name-input" id = "customerNameSearchInput" placeholder = "Search names..." data-bs-toggle="dropdown" aria-label="Text input with segmented dropdown button">
           <!--<button type="button" class="btn btn-outline-secondary">Action</button>-->
             <!--<span class="input-group-text" id="basic-addon1">@</span>-->
               <span class="visually-hidden">Toggle Dropdown</span>
-          <span class="input-group-text" id="basic-addon1">@</span>
+          <div class = "expand-list" data-bs-toggle="dropdown"><span class="material-icons text-secondary expand-more-icon">expand_more</span>
+          </div>
           <ul class="dropdown-menu dropdown-menu-end customer-list" id = "customerList">
             
           </ul>
