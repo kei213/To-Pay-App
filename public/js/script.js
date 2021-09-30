@@ -1,33 +1,33 @@
 // import { renderCustomerList } from './functions.js'
 let customers = {}
 let select = document.querySelector('#customerList')
-
+// console.log('customerHomeView', customerHomeView)
 function renderCustomerList() {
+
   fetch('/all-customers')
       .then(response => response.json())
       .then(data => {
-            console.log('data from db', data)
-            customers = data
+          console.log('data from db', data)
+          customers = data
 
-            select.innerHTML = '<li><h6 class="dropdown-header">Select a customer</h6></li>'
+          select.innerHTML = '<li><h6 class="dropdown-header">Select a customer</h6></li>'
 
-            for (let i = 0; i < customers.length; i++) {
-              select.innerHTML += `<li><a class="dropdown-item" href="#" id = "listItem">${customers[i].name}</a></li>`
+          for (let i = 0; i < customers.length; i++) {
+            select.innerHTML += `<li><a class="dropdown-item" href="#" id = "listItem">${customers[i].name}</a></li>`
 
-              if (i - customers.length == -1) {                 
-                 let listItem = document.querySelectorAll("#listItem")
+            if (i - customers.length == -1) {                 
+                let listItem = document.querySelectorAll("#listItem")
 
-                 for (let i = 0; i < listItem.length; i++) {
-                     listItem[i].addEventListener('click', (e) => {
-                       e.preventDefault() 
-                       console.log(listItem[i].innerText)                  
-
-                     })
-                 }   
-              }
-            }                      
-      })   
-
+                for (let i = 0; i < listItem.length; i++) {
+                    listItem[i].addEventListener('click', (e) => {
+                      e.preventDefault() 
+                      const selectedCustomer = listItem[i].innerText               
+                      loadCustomer(selectedCustomer)
+                    })
+                }   
+            }
+          }                      
+      })  
 }
 
 renderCustomerList()
@@ -42,19 +42,19 @@ renderCustomerList()
 }*/
 
 //listenening for selected customer
-select.addEventListener('input', () => {
-  const selectedCustomer = select.value
-  setTimeout(function(){ select.selectedIndex = 0; }, 2000);
+function loadCustomer(selectedCustomer) {
 
   const customerData = customers.filter(customer => {
         return customer.name === selectedCustomer
   })
+  console.log('customerData.name', customerData[0].name)
+  // customerDataStringify = (JSON.stringify(customerData))
 
-  customerDataStringify = (JSON.stringify(customerData))
+  const workingArea = document.getElementById('homeWorkingArea')
+  workingArea.innerHTML = `
+      <div>name: ${customerData[0].name}</div>`
 
-  const workingArea = document.getElementById('workingArea')
-  workingArea.innerHTML = `${customerDataStringify}`
-})
+}
 
 
 //Adding new customer
@@ -66,8 +66,7 @@ addCustomerForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const name = e.target.elements.customerName.value;
-  const phoneNumber = e.target.elements.customerNumber.value;  
-
+  const phoneNumber = e.target.elements.customerNumber.value; 
  
   return fetch('/add-new-customer', {
       method: 'POST',
@@ -80,24 +79,16 @@ addCustomerForm.addEventListener('submit', (e) => {
   })
   .then( () => {
     // select.innerHTML = "<option></option>";
-    select.innerHTML = "<option selected>Select a Customer</option>"
-    select.innerHTML +=  "<option></option>"                  
+                 
     renderCustomerList()
   })
-
-
 
   console.log('customerData ', customerData)
   customerDataStringify = (JSON.stringify(customerData))
   console.log(customerDataStringify)
 
   const workingArea = document.getElementById('workingArea')
-  workingArea.innerHTML = `${customerDataStringify}`
-
-  select.innerHTML = `<option selected>Select a Customer</option>
-                      <option></option>`
-
-  
+  workingArea.innerHTML = `${customerDataStringify}`  
 
 })  
 
@@ -120,8 +111,6 @@ expandList.addEventListener('click', (e) => {
   })
 
 })
-
-
 
 
 //disabling form submissions if there are invalid fields
