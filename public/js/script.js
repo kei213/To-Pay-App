@@ -1,10 +1,11 @@
 // import { renderCustomerList } from './functions.js'
+
 let customers = {}
 let select = document.querySelector('#customerList')
-// console.log('customerHomeView', customerHomeView)
+
 function renderCustomerList() {
 
-  fetch('/all-customers')
+  fetch('/customer-list')
       .then(response => response.json())
       .then(data => {
           console.log('data from db', data)
@@ -32,16 +33,8 @@ function renderCustomerList() {
 
 renderCustomerList()
 
-//render each customer name to the DOM
-/*function renderCustomerList(customerList) {
-    customers.forEach( (customer) => {      
-          // console.log(customer.name)       
-          select.innerHTML += `<option>${customer.name}</option>`
-      
-    })
-}*/
 
-//listenening for selected customer
+//listening for selected customer
 function loadCustomer(selectedCustomer) {
 
   const customerData = customers.filter(customer => {
@@ -52,7 +45,10 @@ function loadCustomer(selectedCustomer) {
 
   const workingArea = document.getElementById('homeWorkingArea')
   workingArea.innerHTML = `
-      <div>name: ${customerData[0].name}</div>`
+      <div class = "text-secondary">
+          <p>name: ${customerData[0].name}</p>
+          <p>phone number: ${customerData[0].phoneNumber}</p>
+      </div>`
 
 }
 
@@ -60,7 +56,7 @@ function loadCustomer(selectedCustomer) {
 //Adding new customer
 const addCustomerForm = document.getElementById('addCustomerForm');
 
-//submit new customer
+//Submit new customer
 addCustomerForm.addEventListener('submit', (e) => {
   console.log('submit ran')
   e.preventDefault();

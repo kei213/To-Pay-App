@@ -1,7 +1,14 @@
+/*import express from "express"
+import mongoose from "mongoose"
+import bodyParser from "body-parser"
+import Customer from "/models/customer"*/
 const express = require('express')
 const mongoose = require('mongoose')
-const Customer = require('./models/customer')
 const bodyParser = require('body-parser')
+const Schema = mongoose.Schema
+const Customer = require('./models/customer')
+// const AmountToPay = require('./models/amount_to_pay')
+
 
 const app = express()
 const port = 3000
@@ -42,22 +49,7 @@ app.get("/", (req, res) => {
        })
 })
 
-app.get('/add-customer', (req, res) => {
-    const newCustomer = new Customer({
-        name: 'Tim',
-        phoneNumber: 72664512
-    })
-
-    newCustomer.save()
-            .then((result) => {
-                res.send(result)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-})
-
-app.get('/all-customers', (req, res) => {
+app.get('/customer-list', (req, res) => {
     Customer.find()
        .then((result) => {
             res.send(result)
@@ -73,7 +65,8 @@ app.post('/add-new-customer', (req, res) => {
           console.log('name =', name )
     const phoneNumber =  req.body.phoneNumber 
           console.log('phoneNumber =', phoneNumber ) 
-     
+    
+    //Create new customer 
     const newCustomer = new Customer({
         name: name,
         phoneNumber: phoneNumber
@@ -86,5 +79,38 @@ app.post('/add-new-customer', (req, res) => {
             .catch((err) => {
                 console.log(err)
             })
-     
+    
+    //
+    //Create new customer database 
+    let amountToPaySchema = `${name}Schema`
+    console.log(amountToPaySchema)
+        amountToPaySchema = new Schema({
+        /*date: {
+            type: Date,
+            required: true
+        },*/
+        amountToPay: {
+            type: Number,
+            required: true
+        }
+    }, {timestamps: true})
+
+    let  AmountToPay = `${name}AmountToPay`
+         AmountToPay = mongoose.model(AmountToPay, amountToPaySchema, `${name}Data`)
+
+    const newAmountToPay = new AmountToPay({
+        
+        amountToPay: 800
+    })
+
+    newAmountToPay.save()
+            .then((result) => {
+                console.log('nice one kei', result)
+                // res.send(result)
+                return
+            })
+            .catch((err) => {
+                console.log('error kei', err)
+                return
+            })
 })
