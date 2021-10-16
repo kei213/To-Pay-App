@@ -36,19 +36,48 @@ renderCustomerList()
 
 //listening for selected customer
 function loadCustomer(selectedCustomer) {
-
+  console.log('customers', customers)
   const customerData = customers.filter(customer => {
         return customer.name === selectedCustomer
   })
-  console.log('customerData.name', customerData[0].name)
-  // customerDataStringify = (JSON.stringify(customerData))
+  console.log('customerData', customerData)
+  console.log(customerData[0].name)
+  
+  const workingArea = document.getElementById('homeWorkingArea')
+      workingArea.innerHTML = `
+      <div class = "text-secondary">
+          <p>name: ${customerData[0].name}</p>
+          <p>phone number: ${customerData[0].phoneNumber}</p>
+      </div>
+      <div>
 
+      </div>`
+
+  return fetch('/selected-customer', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        // 'CSRF-Token': Cookies.get('XSRF-TOKEN'),
+      },
+      body:JSON.stringify({ selectedCustomer }),              
+  })
+  .then( () => {
+
+                 
+  
+  })
+
+  /*console.log(customerData[0].name)
   const workingArea = document.getElementById('homeWorkingArea')
   workingArea.innerHTML = `
       <div class = "text-secondary">
           <p>name: ${customerData[0].name}</p>
           <p>phone number: ${customerData[0].phoneNumber}</p>
-      </div>`
+      </div>
+      <div>
+
+      </div>`*/
 
 }
 

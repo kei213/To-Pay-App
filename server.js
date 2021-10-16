@@ -5,7 +5,8 @@ import Customer from "/models/customer"*/
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const Schema = mongoose.Schema
+const path = require('path')
+// const Schema = mongoose.Schema
 const Customer = require('./models/customer')
 // const AmountToPay = require('./models/amount_to_pay')
 
@@ -59,12 +60,64 @@ app.get('/customer-list', (req, res) => {
        })  
 })
 
+app.get('/to-pay-records', (req, res) => {
+    Customer.find()
+       .then((result) => {
+            res.send(result)
+       })   
+       .catch((err) => {
+        console.log(err)
+       })  
+})
+
 app.post('/add-new-customer', (req, res) => {
 
     const name = req.body.name.toString()
           console.log('name =', name )
     const phoneNumber =  req.body.phoneNumber 
           console.log('phoneNumber =', phoneNumber ) 
+
+    //Create new customer collection
+
+    function CreateModel(name){//function to create collection , user_name  argument contains collection name
+
+      var Model  = require(path.resolve('./models/dynamicmodel.js'))(name);
+      console.log(Model)
+
+    }
+    
+    CreateModel(name)
+
+    function save_user_info(name, phoneNumber){//function to save user info , data argument contains user info
+        console.log('function save_user_info')
+         var UserModel  = mongoose.model(name + 'collection') ;
+         console.log(UserModel)
+
+        const newCustomer = new UserModel({
+            name: name,
+            phoneNumber: phoneNumber
+        })
+
+        newCustomer.save()
+                .then((result) => {
+                    res.send(result)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+
+         /*var usermodel  = UserModel(data);
+                  usermodel.save(function (err) {
+
+                   if (err) {
+                      console.log(err);
+                    } else {
+                     console.log("\nSaved");
+                    }
+               });*/
+    }      
+
+    save_user_info(name, phoneNumber)
     
     //Create new customer 
     const newCustomer = new Customer({
@@ -81,36 +134,22 @@ app.post('/add-new-customer', (req, res) => {
             })
     
     //
-    //Create new customer database 
-    let amountToPaySchema = `${name}Schema`
-    console.log(amountToPaySchema)
-        amountToPaySchema = new Schema({
-        /*date: {
-            type: Date,
-            required: true
-        },*/
-        amountToPay: {
-            type: Number,
-            required: true
-        }
-    }, {timestamps: true})
+    
 
-    let  AmountToPay = `${name}AmountToPay`
-         AmountToPay = mongoose.model(AmountToPay, amountToPaySchema, `${name}Data`)
+})
 
-    const newAmountToPay = new AmountToPay({
-        
-        amountToPay: 800
-    })
-
-    newAmountToPay.save()
-            .then((result) => {
-                console.log('nice one kei', result)
-                // res.send(result)
-                return
-            })
-            .catch((err) => {
-                console.log('error kei', err)
-                return
-            })
+app.post('/selected-customer', (req, res) => {
+    const selectedCustomer = req.body.selectedCustomer.toString()
+    console.log('selectedCustomer =', selectedCustomer )
+    var selectedCustomerCollection  = mongoose.model(selectedCustomer + 'collection') ;
+         console.log('POST', selectedCustomerCollection)
+    // const custModel = `${selectedCustomer}AmountToPay`
+    selectedCustomerCollection.find()
+       .then((result) => {
+            res.send(result)
+            console.log('success', result)
+       })   
+       .catch((err) => {
+        console.log(err)
+       })
 })

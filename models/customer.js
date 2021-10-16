@@ -12,7 +12,7 @@ const customerSchema = new Schema({
 	}
 }, {timestamps: true})
 
-const Customer = mongoose.model('Customer', customerSchema, 'customers')
+const Customer = mongoose.model('Customer', customerSchema)
 module.exports = Customer
 
 // var message_temp = mongoose.model('message', message,'collectionyouwant');
