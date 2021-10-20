@@ -7,8 +7,8 @@ var mongoose = require('mongoose'),
   function dynamicModel(name) {
       var addressSchema = new Schema(
           {
-               "name" : {type: String, default: '',trim: true},
-               "phoneNumber" : {type: String, default: '',trim: true},
+               "day" : {type: String, default: '',trim: true},
+               "amount" : {type: Number, default: '',trim: true},
                // "date" : {type: Date},
                
           }

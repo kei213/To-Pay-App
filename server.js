@@ -77,7 +77,7 @@ app.post('/add-new-customer', (req, res) => {
     const phoneNumber =  req.body.phoneNumber 
           console.log('phoneNumber =', phoneNumber ) 
 
-    //Create new customer collection
+    //Dynamically create new customer collection model
 
     function CreateModel(name){//function to create collection , user_name  argument contains collection name
 
@@ -88,38 +88,7 @@ app.post('/add-new-customer', (req, res) => {
     
     CreateModel(name)
 
-    function save_user_info(name, phoneNumber){//function to save user info , data argument contains user info
-        console.log('function save_user_info')
-         var UserModel  = mongoose.model(name + 'collection') ;
-         console.log(UserModel)
-
-        const newCustomer = new UserModel({
-            name: name,
-            phoneNumber: phoneNumber
-        })
-
-        newCustomer.save()
-                .then((result) => {
-                    res.send(result)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-
-         /*var usermodel  = UserModel(data);
-                  usermodel.save(function (err) {
-
-                   if (err) {
-                      console.log(err);
-                    } else {
-                     console.log("\nSaved");
-                    }
-               });*/
-    }      
-
-    save_user_info(name, phoneNumber)
-    
-    //Create new customer 
+    //add new customer to customer list 
     const newCustomer = new Customer({
         name: name,
         phoneNumber: phoneNumber
@@ -132,9 +101,26 @@ app.post('/add-new-customer', (req, res) => {
             .catch((err) => {
                 console.log(err)
             })
-    
-    //
-    
+
+    /*function save_user_info(name, phoneNumber){//function to save user info , data argument contains user info
+        console.log('function save_user_info')
+         var UserModel  = mongoose.model(name + 'collection') ;
+         console.log(UserModel)
+
+        const newCustomer = new UserModel({
+            day: name,
+            phoneNumber: phoneNumber
+        })
+
+        newCustomer.save()
+                .then((result) => {
+                    // res.send(result)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })     
+
+    save_user_info(name, phoneNumber) */    
 
 })
 
