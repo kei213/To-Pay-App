@@ -62,10 +62,8 @@ function loadCustomer(selectedCustomer) {
       },
       body:JSON.stringify({ selectedCustomer }),              
   })
-  .then( () => {
-
-                 
-  
+ .then( (response) => { 
+   console.log(response)
   })
 
   /*console.log(customerData[0].name)

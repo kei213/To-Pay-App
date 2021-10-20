@@ -34,16 +34,35 @@ mongoose.connect(dbURI, {
 )
 .catch((err) => console.log('not connected', err));
 
-//Get the default connection
-var connection = mongoose.connection;
+//create dynamic models
+Customer.find()
+       .then((result) => {
+            
+
+            for (let i = 0; i < result.length; i++) {
+                const name = result[i].name
+                function CreateModel(name){//function to create collection , user_name  argument contains collection name
+                  console.log('CreateModel ran')
+                  var Model  = require(path.resolve('./models/dynamicmodel.js'))(name);
+                  console.log(Model)
+
+                }
+                CreateModel(name)
+            }
+
+       })   
+       .catch((err) => {
+        console.log(err)
+       })
 
 app.get("/", (req, res) => {
 	 
         Customer.find()
-       .then((result) => {
-            // res.render('index')
+       .then((result) => {         
+
+            
             res.render('index')
-            console.log(result)
+            // console.log(result)
        })   
        .catch((err) => {
         console.log(err)
@@ -102,14 +121,14 @@ app.post('/add-new-customer', (req, res) => {
                 console.log(err)
             })
 
-    /*function save_user_info(name, phoneNumber){//function to save user info , data argument contains user info
+    function save_user_info(name, phoneNumber){//function to save user info , data argument contains user info
         console.log('function save_user_info')
          var UserModel  = mongoose.model(name + 'collection') ;
          console.log(UserModel)
 
         const newCustomer = new UserModel({
             day: name,
-            phoneNumber: phoneNumber
+            amount: phoneNumber
         })
 
         newCustomer.save()
@@ -119,8 +138,8 @@ app.post('/add-new-customer', (req, res) => {
                 .catch((err) => {
                     console.log(err)
                 })     
-
-    save_user_info(name, phoneNumber) */    
+    }
+    save_user_info(name, phoneNumber)    
 
 })
 
@@ -132,7 +151,7 @@ app.post('/selected-customer', (req, res) => {
     // const custModel = `${selectedCustomer}AmountToPay`
     selectedCustomerCollection.find()
        .then((result) => {
-            res.send(result)
+            res.send(result.json)
             console.log('success', result)
        })   
        .catch((err) => {
