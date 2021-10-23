@@ -1,6 +1,7 @@
 // import { renderCustomerList } from './functions.js'
 
 let customers = {}
+var loadedCustomerData
 let select = document.querySelector('#customerList')
 
 function renderCustomerList() {
@@ -8,7 +9,7 @@ function renderCustomerList() {
   fetch('/customer-list')
       .then(response => response.json())
       .then(data => {
-          console.log('data from db', data)
+          console.log('fetch/customer-list', data)
           customers = data
 
           select.innerHTML = '<li><h6 class="dropdown-header">Select a customer</h6></li>'
@@ -36,12 +37,10 @@ renderCustomerList()
 
 //listening for selected customer
 function loadCustomer(selectedCustomer) {
-  console.log('customers', customers)
+
   const customerData = customers.filter(customer => {
         return customer.name === selectedCustomer
   })
-  console.log('customerData', customerData)
-  console.log(customerData[0].name)
   
   const workingArea = document.getElementById('homeWorkingArea')
       workingArea.innerHTML = `
@@ -50,10 +49,10 @@ function loadCustomer(selectedCustomer) {
           <p>phone number: ${customerData[0].phoneNumber}</p>
       </div>
       <div>
-
+          
       </div>`
 
-  return fetch('/selected-customer', {
+  fetch('/selected-customer', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -62,20 +61,22 @@ function loadCustomer(selectedCustomer) {
       },
       body:JSON.stringify({ selectedCustomer }),              
   })
- .then( (response) => { 
-   console.log(response)
+  .then( (response) => { 
+      console.log('selected-customer response', response) 
+      fetch('./customer-data')
+      .then((response) => response.text())      
+      .then((data) => {
+        console.log('fetch/customer-data', data)
+          loadedCustomerData = JSON.parse(data)
+      })
+     
+      .then(() => {
+        
+        workingArea.innerHTML += `<div>${loadedCustomerData[0].amount}</div>
+                                  <div>${loadedCustomerData[0].day}</div>`
+      })  
+
   })
-
-  /*console.log(customerData[0].name)
-  const workingArea = document.getElementById('homeWorkingArea')
-  workingArea.innerHTML = `
-      <div class = "text-secondary">
-          <p>name: ${customerData[0].name}</p>
-          <p>phone number: ${customerData[0].phoneNumber}</p>
-      </div>
-      <div>
-
-      </div>`*/
 
 }
 
@@ -101,10 +102,11 @@ addCustomerForm.addEventListener('submit', (e) => {
       body:JSON.stringify({ name, phoneNumber}),              
   })
   .then( () => {
-    // select.innerHTML = "<option></option>";
-                 
+    // select.innerHTML = "<option></option>";                 
     renderCustomerList()
+    
   })
+  .then
 
   console.log('customerData ', customerData)
   customerDataStringify = (JSON.stringify(customerData))
@@ -115,46 +117,6 @@ addCustomerForm.addEventListener('submit', (e) => {
 
 })  
 
-let searchInput = document.querySelector("#customerNameSearchInput")
-searchInput.addEventListener('click', (e) => {
-  e.preventDefault() 
-  var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-  var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-  return new bootstrap.Dropdown(dropdownToggleEl)
-  })
-})
-
-const expandList = document.querySelector(".expand-list")
-expandList.addEventListener('click', (e) => {  
-  e.preventDefault()  
-
-  var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-  var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-  return new bootstrap.Dropdown(dropdownToggleEl)
-  })
-
-})
 
 
-//disabling form submissions if there are invalid fields
-function disableFormSubmission() {
-  'use strict'
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  var forms = document.querySelectorAll('.needs-validation')
-
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-
-        form.classList.add('was-validated')
-      }, false)
-    })
-}
-
-disableFormSubmission()

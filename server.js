@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 const path = require('path')
 // const Schema = mongoose.Schema
 const Customer = require('./models/customer')
+let customerData
 // const AmountToPay = require('./models/amount_to_pay')
 
 
@@ -34,7 +35,7 @@ mongoose.connect(dbURI, {
 )
 .catch((err) => console.log('not connected', err));
 
-//create dynamic models
+//init dynamic models
 Customer.find()
        .then((result) => {
             
@@ -79,15 +80,6 @@ app.get('/customer-list', (req, res) => {
        })  
 })
 
-app.get('/to-pay-records', (req, res) => {
-    Customer.find()
-       .then((result) => {
-            res.send(result)
-       })   
-       .catch((err) => {
-        console.log(err)
-       })  
-})
 
 app.post('/add-new-customer', (req, res) => {
 
@@ -144,17 +136,28 @@ app.post('/add-new-customer', (req, res) => {
 })
 
 app.post('/selected-customer', (req, res) => {
+    console.log('/selected-customer')
     const selectedCustomer = req.body.selectedCustomer.toString()
-    console.log('selectedCustomer =', selectedCustomer )
+
     var selectedCustomerCollection  = mongoose.model(selectedCustomer + 'collection') ;
          console.log('POST', selectedCustomerCollection)
-    // const custModel = `${selectedCustomer}AmountToPay`
+
     selectedCustomerCollection.find()
        .then((result) => {
-            res.send(result.json)
-            console.log('success', result)
+            
+            customerData = result
+            console.log('customerData', customerData)
+            res.send(result)
+
        })   
        .catch((err) => {
         console.log(err)
-       })
+    })
 })
+
+app.get("/customer-data", (req, res) => {
+    console.log('customer-data', customerData )
+
+    res.send(customerData)
+})
+
