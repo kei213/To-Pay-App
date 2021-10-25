@@ -161,3 +161,27 @@ app.get("/customer-data", (req, res) => {
     res.send(customerData)
 })
 
+app.post('/add-daily-amount', (req, res) => {
+    
+    const customerName = req.body.customerName.toString()
+
+    var selectedCustomerCollection  = mongoose.model(customerName + 'collection') ;
+         console.log('POST', selectedCustomerCollection)
+
+    const dailyAmountValue =   req.body.dailyAmountValue  
+
+    const newDailyDocument = new selectedCustomerCollection({
+        day: customerName, 
+        amount: dailyAmountValue
+    })
+
+        newDailyDocument.save()
+            .then((result) => {
+                console.log('daily document saved')
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+
+})

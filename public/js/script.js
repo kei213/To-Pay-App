@@ -3,6 +3,8 @@
 let customers = {}
 var loadedCustomerData
 let select = document.querySelector('#customerList')
+let dailyAmountInputDropdown = document.querySelector('#dailyAmountInputDropdown')
+
 
 function renderCustomerList() {
 
@@ -15,10 +17,10 @@ function renderCustomerList() {
           select.innerHTML = '<li><h6 class="dropdown-header">Select a customer</h6></li>'
 
           for (let i = 0; i < customers.length; i++) {
-            select.innerHTML += `<li><a class="dropdown-item" href="#" id = "listItem">${customers[i].name}</a></li>`
+            select.innerHTML += `<li><a class="dropdown-item" href="#" id = "listItemCustomerList">${customers[i].name}</a></li>`
 
             if (i - customers.length == -1) {                 
-                let listItem = document.querySelectorAll("#listItem")
+                let listItem = document.querySelectorAll("#listItemCustomerList")
 
                 for (let i = 0; i < listItem.length; i++) {
                     listItem[i].addEventListener('click', (e) => {
@@ -28,7 +30,27 @@ function renderCustomerList() {
                     })
                 }   
             }
-          }                      
+          } 
+          
+          for (let i = 0; i < customers.length; i++) {
+           
+            dailyAmountInputDropdown.innerHTML +=  `<li><a class="dropdown-item" href="#" id = "listItemEnterAmount">${customers[i].name}</a></li>` 
+
+            if (i - customers.length == -1) {                 
+                let listItemEnterAmount = document.querySelectorAll("#listItemEnterAmount")
+
+                for (let i = 0; i < listItemEnterAmount.length; i++) {
+                    listItemEnterAmount[i].addEventListener('click', (e) => {
+                      e.preventDefault() 
+                      const selectedCustomer = listItemEnterAmount[i].innerText  
+                      const selectNameAmountInput = document.querySelector('#selectNameAmountInput')  
+                      console.log(selectNameAmountInput)
+                      selectNameAmountInput.value = selectedCustomer           
+                      
+                    })
+                }   
+            }
+          }                             
       })  
 }
 
@@ -71,9 +93,10 @@ function loadCustomer(selectedCustomer) {
       })
      
       .then(() => {
-        
-        workingArea.innerHTML += `<div>${loadedCustomerData[0].amount}</div>
-                                  <div>${loadedCustomerData[0].day}</div>`
+        for (let i = 0; i < loadedCustomerData.length; i++ ) {
+            workingArea.innerHTML += `<div>${loadedCustomerData[i].amount}</div>
+                                      <div>${loadedCustomerData[i].day}</div>`
+        }                          
       })  
 
   })
@@ -106,8 +129,7 @@ addCustomerForm.addEventListener('submit', (e) => {
     renderCustomerList()
     
   })
-  .then
-
+ 
   console.log('customerData ', customerData)
   customerDataStringify = (JSON.stringify(customerData))
   console.log(customerDataStringify)
@@ -118,5 +140,25 @@ addCustomerForm.addEventListener('submit', (e) => {
 })  
 
 
-
+const enterAmountBtn = document.querySelector('#enterAmountBtn')
+enterAmountBtn.addEventListener('click', () => {
+  const selectNameAmountInput = document.querySelector('#selectNameAmountInput')
+  const customerName = selectNameAmountInput.value
+  const dailyamount = document.querySelector('#dailyAmount')
+  const dailyAmountValue = dailyamount.value
+  
+  return fetch('/add-daily-amount', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        // 'CSRF-Token': Cookies.get('XSRF-TOKEN'),
+      },
+      body:JSON.stringify({ customerName, dailyAmountValue}),              
+  })
+  .then( () => {
+  
+    
+  })
+})
 

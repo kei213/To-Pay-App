@@ -51,15 +51,8 @@
     <div class = "container main-section">
 
       <section class = "select-add-container">
-        <!--<select id = "customerSelect" class="form-select form-select-sm" aria-label=".form-select-sm example">
-          <option selected>Select a Customer</option>
-          <option id = "customerList"></option>
-        </select>-->    
-          <!--<option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>-->
 
-        <div class="input-group btn-group select-customer">
+        <div class="input-group btn-group select-customer-div">
           <input type="text" class="form-control search-name-input" id = "customerNameSearchInput" placeholder = "Search names..." data-bs-toggle="dropdown" aria-label="Text input with segmented dropdown button">
           <!--<button type="button" class="btn btn-outline-secondary">Action</button>-->
             <!--<span class="input-group-text" id="basic-addon1">@</span>-->
@@ -69,13 +62,33 @@
           <ul class="dropdown-menu dropdown-menu-end customer-list" id = "customerList">
             
           </ul>
-        </div>  
+        </div>
 
         <button type="button" class="btn btn-outline-primary btn-sm add-customer-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Add new Customer</button>
       </section> 
         
       <section class = "home-working-container">           
           <div class = "home-working-area" id = "homeWorkingArea"></div>        
+      </section>
+
+      <section class = "daily-amounts-inputs-container"> 
+
+          <form class = "input-group btn-group daily-amount-input-div" id = "dailyAmountInputForm">
+              <input type="text" class="form-control select-name-amount" id = "selectNameAmountInput" placeholder = "Search names..." data-bs-toggle="dropdown" aria-label="Text input with segmented dropdown button">
+              <!---->
+              <!--<span class="input-group-text" id="basic-addon1">@</span>-->
+              <span class="visually-hidden">Toggle Dropdown</span>
+              <ul class="dropdown-menu dropdown-menu-end customer-list-amount" id = "dailyAmountInputDropdown">
+            
+              </ul>  
+              
+            
+          </form> 
+          <div class = "amount-input-div">
+              <input type = "number" class="form-control daily-amount-input" id  = "dailyAmount"placeholder = "enter amount">            
+          </div>
+          <button type="button" class="btn btn-outline-secondary" id = "enterAmountBtn">Action</button>
+      
       </section>
 
       <!--Modal-->
