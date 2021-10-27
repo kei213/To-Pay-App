@@ -1,13 +1,13 @@
 // import { renderCustomerList } from './functions.js'
 
-let customers = {}
+let customers 
 var loadedCustomerData
 let select = document.querySelector('#customerList')
 let dailyAmountInputDropdown = document.querySelector('#dailyAmountInputDropdown')
 
 
 function renderCustomerList() {
-
+   console.log('renderCustomerList')
   fetch('/customer-list')
       .then(response => response.json())
       .then(data => {
@@ -32,8 +32,10 @@ function renderCustomerList() {
             }
           } 
           
+          dailyAmountInputDropdown.innerHTML = '<li><h6 class="dropdown-header">Select a customer</h6></li>'
+
           for (let i = 0; i < customers.length; i++) {
-           
+            
             dailyAmountInputDropdown.innerHTML +=  `<li><a class="dropdown-item" href="#" id = "listItemEnterAmount">${customers[i].name}</a></li>` 
 
             if (i - customers.length == -1) {                 
@@ -44,7 +46,7 @@ function renderCustomerList() {
                       e.preventDefault() 
                       const selectedCustomer = listItemEnterAmount[i].innerText  
                       const selectNameAmountInput = document.querySelector('#selectNameAmountInput')  
-                      console.log(selectNameAmountInput)
+                      
                       selectNameAmountInput.value = selectedCustomer           
                       
                     })
@@ -59,7 +61,7 @@ renderCustomerList()
 
 //listening for selected customer
 function loadCustomer(selectedCustomer) {
-
+  console.log('loadCustomer')
   const customerData = customers.filter(customer => {
         return customer.name === selectedCustomer
   })
@@ -77,9 +79,9 @@ function loadCustomer(selectedCustomer) {
   fetch('/selected-customer', {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
-        // 'CSRF-Token': Cookies.get('XSRF-TOKEN'),
+       
       },
       body:JSON.stringify({ selectedCustomer }),              
   })
@@ -93,10 +95,14 @@ function loadCustomer(selectedCustomer) {
       })
      
       .then(() => {
+        let totalAmountDue = 0
         for (let i = 0; i < loadedCustomerData.length; i++ ) {
             workingArea.innerHTML += `<div>${loadedCustomerData[i].amount}</div>
                                       <div>${loadedCustomerData[i].day}</div>`
-        }                          
+            totalAmountDue += loadedCustomerData[i].amount                         
+        }
+
+        workingArea.innerHTML +=  `<div>Total Amount To Pay = ${totalAmountDue}</div>`                       
       })  
 
   })
@@ -118,9 +124,9 @@ addCustomerForm.addEventListener('submit', (e) => {
   return fetch('/add-new-customer', {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
-        // 'CSRF-Token': Cookies.get('XSRF-TOKEN'),
+        
       },
       body:JSON.stringify({ name, phoneNumber}),              
   })
@@ -141,7 +147,9 @@ addCustomerForm.addEventListener('submit', (e) => {
 
 
 const enterAmountBtn = document.querySelector('#enterAmountBtn')
-enterAmountBtn.addEventListener('click', () => {
+
+enterAmountBtn.addEventListener('click', (e) => {
+  e.preventDefault();
   const selectNameAmountInput = document.querySelector('#selectNameAmountInput')
   const customerName = selectNameAmountInput.value
   const dailyamount = document.querySelector('#dailyAmount')
@@ -150,15 +158,18 @@ enterAmountBtn.addEventListener('click', () => {
   return fetch('/add-daily-amount', {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
-        // 'CSRF-Token': Cookies.get('XSRF-TOKEN'),
+        
       },
       body:JSON.stringify({ customerName, dailyAmountValue}),              
   })
   .then( () => {
-  
+    console.log('new amount submitted')
+      loadCustomer(customerName)
     
   })
+
+  console.log('end of enterAmountBtn.addEventListener')
 })
 

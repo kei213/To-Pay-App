@@ -113,7 +113,7 @@ app.post('/add-new-customer', (req, res) => {
                 console.log(err)
             })
 
-    function save_user_info(name, phoneNumber){//function to save user info , data argument contains user info
+    /*function save_user_info(name, phoneNumber){//function to save user info , data argument contains user info
         console.log('function save_user_info')
          var UserModel  = mongoose.model(name + 'collection') ;
          console.log(UserModel)
@@ -131,7 +131,7 @@ app.post('/add-new-customer', (req, res) => {
                     console.log(err)
                 })     
     }
-    save_user_info(name, phoneNumber)    
+    save_user_info(name, phoneNumber)  */  
 
 })
 
@@ -177,6 +177,7 @@ app.post('/add-daily-amount', (req, res) => {
 
         newDailyDocument.save()
             .then((result) => {
+                res.send(result)
                 console.log('daily document saved')
             })
             .catch((err) => {
